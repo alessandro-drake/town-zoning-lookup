@@ -111,7 +111,7 @@ def parse_zoning_response(response_text: str) -> Dict:
     }
 
 def get_zoning_ordinance(city_name: str) -> Dict:
-    """Get zoning ordinance information for a city using Claude API."""
+    """Get zoning ordinance information for a city using Claude with web search tools."""
     
     prompt = f"""
 You are tasked with finding the most recent version of a city's zoning ordinance, code, or bylaw for development. Your goal is to return a concise result with a working web link to the document, preferably in PDF format.
@@ -123,49 +123,65 @@ The city name you will be searching for is:
 
 Follow these steps to complete the task:
 
-1. Conduct a web search for the zoning ordinance of the specified city. Use search terms like "[CITY_NAME] zoning ordinance", "[CITY_NAME] zoning code", or "[CITY_NAME] development bylaw".
+1. Search the web for the zoning ordinance of the specified city. Use search terms like:
+   - "{city_name} zoning ordinance filetype:pdf"
+   - "{city_name} zoning code official"
+   - "{city_name} municipal code zoning"
 
-2. Verify that you have found the most recent version of the ordinance. Look for:
-   - Date of publication or last update
-   - Any mentions of recent amendments or revisions
-   - News articles or press releases about recent zoning changes
+2. Look for official government websites (.gov domains preferred)
 
-3. Ensure that the document you've found is the official, comprehensive zoning ordinance for the entire city, not just a specific district or a summary of regulations.
+3. Verify that you have found the most recent version of the ordinance by:
+   - Checking the date of publication or last update
+   - Looking for mentions of recent amendments or revisions
+   - Ensuring it's the comprehensive city-wide ordinance, not just a district-specific document
 
-4. Check that the web link to the document is functional and, if possible, leads directly to a PDF version of the ordinance.
+4. Prioritize:
+   - Direct PDF links over web pages
+   - Official city/government websites over third-party sites
+   - Recent documents over archived versions
 
-5. If you cannot find a PDF version, provide a link to the most accessible official version available (e.g., a web page with the full text).
-
-6. If you encounter multiple versions or conflicting information, briefly explain your reasoning for selecting a particular version as the most recent.
+5. If you find multiple versions, explain your reasoning for selecting the most recent/official one
 
 Return your findings in the following format:
 
 <zoning_ordinance>
-<city>Insert the city name here</city>
+<city>{city_name}</city>
 <link>Insert the direct link to the ordinance document here</link>
-<file_type>Specify whether it's a PDF or another format</file_type>
-<notes>Include any brief, relevant notes about the document or your search process here. This field is optional and should only be used if necessary.</notes>
+<file_type>Specify whether it's a PDF, web page, or other format</file_type>
+<notes>Include brief notes about the document, its date, or your search process if relevant</notes>
 </zoning_ordinance>
 
-If you cannot find the zoning ordinance or are unsure about its validity, explain the issue briefly in the <notes> section.
+If you cannot find a reliable zoning ordinance, explain the issue in the <notes> section and suggest alternatives like contacting the city directly.
 
-Remember to focus solely on finding and returning the ordinance information. Do not include any analysis of the ordinance content or any other extraneous information.
+Use the web search tool to find current, accurate information. Do not rely on your training data for specific document links.
 """
     
     try:
+        # Using the correct web search tool syntax from Anthropic documentation
         response = client.messages.create(
             model="claude-3-5-sonnet-20241022",
-            max_tokens=1000,
+            max_tokens=2000,
+            tools=[
+                {
+                    "type": "web_search_20250305",
+                    "name": "web_search"
+                }
+            ],
             messages=[
                 {"role": "user", "content": prompt}
             ]
         )
         
-        response_text = response.content[0].text
-        return parse_zoning_response(response_text)
+        # Extract the final text response
+        final_response = ""
+        for content in response.content:
+            if content.type == "text":
+                final_response += content.text
+        
+        return parse_zoning_response(final_response)
         
     except Exception as e:
-        raise Exception(f"Error calling Claude API: {str(e)}")
+        raise Exception(f"Error calling Claude API with web search: {str(e)}")
 
 @app.route('/')
 def home():
@@ -186,7 +202,7 @@ def api_zoning():
         if not city_name:
             return jsonify({'error': 'City name cannot be empty'}), 400
         
-        # Get zoning ordinance information
+        # Get zoning ordinance information using web search
         result = get_zoning_ordinance(city_name)
         
         # Validate that we got the required fields
@@ -210,4 +226,6 @@ if __name__ == '__main__':
         print("Please create a .env file with your API key or set it as an environment variable")
         exit(1)
     
+    print("Starting Zoning Ordinance Finder with Anthropic Web Search...")
+    print("Available at: http://localhost:8000")
     app.run(debug=True, host='0.0.0.0', port=8000)
