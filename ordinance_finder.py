@@ -5,11 +5,13 @@ from typing import Dict, Optional
 from flask import Flask, request, jsonify, render_template
 from anthropic import Anthropic
 from dotenv import load_dotenv
+from analysis_api import register_to
 
 # Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
+register_to(app)
 
 # Initialize Anthropic client
 client = Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
@@ -146,14 +148,3 @@ def api_zoning():
 def health_check():
     """Health check endpoint."""
     return jsonify({'status': 'healthy'})
-
-if __name__ == '__main__':
-    # Check if API key is set
-    if not os.getenv('ANTHROPIC_API_KEY'):
-        print("Error: ANTHROPIC_API_KEY environment variable is not set")
-        print("Please create a .env file with your API key or set it as an environment variable")
-        exit(1)
-    
-    print("Starting Zoning Ordinance Finder with Anthropic Web Search...")
-    print("Available at: http://localhost:8000")
-    app.run(debug=True, host='0.0.0.0', port=8000)

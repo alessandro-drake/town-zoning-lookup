@@ -2,3 +2,6 @@ flask==2.3.3
 anthropic==0.58.2
 python-dotenv==1.0.0
 requests==2.31.0
+celery==5.5.3
+redis==6.2.0
+pdfplumber==0.11.7
