@@ -1,0 +1,232 @@
+{
+  "zoning_best_practices_framework": {
+    "metadata": {
+      "version": "1.0",
+      "target_region": "United States (Boston Metro inspiration)",
+      "scoring_scale": "0-100 (100 = optimal)",
+      "last_updated": "2024"
+    },
+    
+    "evaluation_categories": {
+      
+      "housing_density_flexibility": {
+        "weight": 25,
+        "description": "Ability to build appropriate housing density near job centers and transit",
+        "criteria": {
+          "multifamily_zoning_near_transit": {
+            "optimal": "Multifamily housing allowed within 0.5 miles of major transit stations",
+            "good": "Multifamily allowed within 1 mile of transit",
+            "poor": "Primarily single-family zoning within 1 mile of transit",
+            "examples": "Cambridge's upzoning near Red Line stations"
+          },
+          "missing_middle_housing": {
+            "optimal": "Duplexes, triplexes, small apartment buildings allowed in residential zones",
+            "good": "Some missing middle housing types permitted by-right",
+            "poor": "Only single-family homes or large apartment complexes allowed",
+            "examples": "Minneapolis 2040 plan allowing triplexes citywide"
+          },
+          "minimum_lot_sizes": {
+            "optimal": "No minimum lot size or <5,000 sq ft",
+            "good": "5,000-8,000 sq ft minimum",
+            "poor": ">10,000 sq ft minimum lot sizes",
+            "impact": "Large minimums prevent efficient land use"
+          },
+          "floor_area_ratio": {
+            "optimal": "FAR >2.0 near transit, >1.0 in residential areas",
+            "good": "FAR 1.0-2.0 near transit, 0.5-1.0 residential",
+            "poor": "FAR <0.5 in most areas",
+            "examples": "Somerville's corridor zoning with higher FAR"
+          }
+        }
+      },
+
+      "approval_process_streamlining": {
+        "weight": 30,
+        "description": "Efficiency and predictability of development approval process",
+        "criteria": {
+          "by_right_development": {
+            "optimal": "Most residential projects approved by-right if meeting zoning",
+            "good": "Administrative review only for compliant projects",
+            "poor": "Discretionary review required for most projects",
+            "examples": "California SB 9 duplex by-right approval"
+          },
+          "review_timeline_limits": {
+            "optimal": "Hard deadlines <90 days for residential projects",
+            "good": "Soft deadlines 90-180 days",
+            "poor": "No timeline limits or >6 months typical",
+            "impact": "Delays add carrying costs and uncertainty"
+          },
+          "number_of_approval_bodies": {
+            "optimal": "Single approval authority for most projects",
+            "good": "2 boards maximum with clear jurisdiction",
+            "poor": "3+ boards with overlapping/veto authority",
+            "red_flags": ["Multiple boards with full veto power", "Undefined review criteria"]
+          },
+          "community_input_structure": {
+            "optimal": "Input opportunities but not veto power for compliant projects",
+            "good": "Structured input process with clear timelines",
+            "poor": "Open-ended community input can indefinitely delay projects",
+            "examples": "Boston's Article 80 vs streamlined processes"
+          },
+          "appeal_limitations": {
+            "optimal": "Limited appeal grounds, short appeal windows",
+            "good": "Clear appeal criteria and timelines",
+            "poor": "Broad appeal rights with long windows",
+            "impact": "Excessive appeal rights enable obstruction"
+          }
+        }
+      },
+
+      "parking_requirements": {
+        "weight": 20,
+        "description": "Parking minimums and their impact on development feasibility",
+        "criteria": {
+          "residential_parking_minimums": {
+            "optimal": "No parking minimums or <0.5 spaces per unit near transit",
+            "good": "0.5-1.0 spaces per unit, reduced near transit",
+            "poor": ">1.5 spaces per unit regardless of location",
+            "examples": "Cambridge eliminated minimums near transit"
+          },
+          "commercial_parking_minimums": {
+            "optimal": "No minimums or market-driven parking supply",
+            "good": "Flexible minimums with reduction options",
+            "poor": "Rigid minimums based on outdated studies",
+            "impact": "Excessive parking increases costs and reduces walkability"
+          },
+          "parking_maximums": {
+            "optimal": "Parking maximums in dense/transit areas",
+            "good": "Some parking caps in downtown areas",
+            "poor": "No parking maximums anywhere",
+            "examples": "San Francisco's parking maximums"
+          },
+          "shared_parking_allowances": {
+            "optimal": "Shared parking encouraged/required for mixed-use",
+            "good": "Shared parking allowed with approval",
+            "poor": "No shared parking provisions",
+            "benefits": "Reduces total parking needed"
+          }
+        }
+      },
+
+      "affordability_requirements": {
+        "weight": 15,
+        "description": "Affordable housing mandates and their development impact",
+        "criteria": {
+          "inclusionary_percentage": {
+            "optimal": "10-15% affordable housing requirement",
+            "concerning": "15-20% requirement",
+            "poor": ">20% requirement without substantial subsidies",
+            "rationale": "High percentages can make projects financially infeasible"
+          },
+          "alternative_compliance": {
+            "optimal": "In-lieu fees or off-site options available",
+            "good": "Some flexibility in compliance methods",
+            "poor": "Only on-site affordable units accepted",
+            "examples": "Boston's IDP with payment options"
+          },
+          "affordability_duration": {
+            "optimal": "30-50 year affordability requirements",
+            "good": "Long-term but not perpetual requirements",
+            "concerning": "Perpetual affordability requirements",
+            "impact": "Perpetual requirements affect financing"
+          },
+          "income_targeting": {
+            "optimal": "Mix of income levels (60-120% AMI)",
+            "good": "Focused on moderate income (80-120% AMI)",
+            "challenging": "Very low income requirements without subsidies",
+            "note": "Deep affordability requires public subsidy"
+          }
+        }
+      },
+
+      "mixed_use_flexibility": {
+        "weight": 10,
+        "description": "Ability to combine residential and commercial uses",
+        "criteria": {
+          "mixed_use_zoning": {
+            "optimal": "Mixed-use encouraged in commercial districts",
+            "good": "Mixed-use allowed with special permits",
+            "poor": "Strict separation of uses required",
+            "examples": "Assembly Row, Legacy Place mixed-use"
+          },
+          "ground_floor_activation": {
+            "optimal": "Ground floor commercial required/encouraged on main streets",
+            "good": "Ground floor commercial allowed",
+            "poor": "No provisions for street-level activity",
+            "impact": "Creates walkable, vibrant neighborhoods"
+          },
+          "home_occupation_rules": {
+            "optimal": "Flexible home business allowances",
+            "good": "Some home occupation permitted",
+            "poor": "Restrictive home business rules",
+            "relevance": "Supports modern work patterns"
+          }
+        }
+      }
+    },
+
+    "red_flag_indicators": [
+      "Parking minimums >1.5 spaces per unit",
+      "Affordability requirements >20% without subsidies",
+      "No by-right development for compliant projects",
+      "Multiple boards with veto authority",
+      "No maximum review timelines",
+      "Minimum lot sizes >15,000 sq ft",
+      "FAR limits <0.3 near transit",
+      "No multifamily housing within 1 mile of transit",
+      "Broad community veto power over compliant projects"
+    ],
+
+    "green_flag_indicators": [
+      "Eliminated or minimal parking minimums",
+      "By-right approval for zoning-compliant projects",
+      "Single approval authority",
+      "Hard timeline limits <120 days",
+      "Missing middle housing allowed",
+      "Mixed-use encouraged",
+      "Reasonable affordability requirements <15%",
+      "Multifamily zoning near transit"
+    ],
+
+    "scoring_methodology": {
+      "calculation": "Weighted average of category scores",
+      "bonus_points": "Additional points for innovative policies",
+      "penalty_points": "Deductions for major red flags",
+      "regional_adjustments": "Account for local market conditions"
+    },
+
+    "improvement_prioritization": {
+      "tier_1_critical": [
+        "Eliminate excessive parking minimums",
+        "Streamline approval process",
+        "Allow by-right development",
+        "Reduce approval timeline"
+      ],
+      "tier_2_important": [
+        "Allow missing middle housing",
+        "Increase density near transit",
+        "Reduce lot size minimums",
+        "Reform affordability requirements"
+      ],
+      "tier_3_beneficial": [
+        "Encourage mixed-use development",
+        "Add parking maximums",
+        "Improve design standards",
+        "Enhance community engagement"
+      ]
+    },
+
+    "boston_area_examples": {
+      "good_practices": {
+        "cambridge": "Eliminated parking minimums near transit, upzoned near Red Line",
+        "somerville": "Assembly Row mixed-use zoning, corridor upzoning",
+        "boston": "PLAN Downtown zoning reform, reduced parking minimums"
+      },
+      "areas_for_improvement": {
+        "newton": "Large lot requirements, limited multifamily zoning",
+        "brookline": "Complex approval process, high parking requirements",
+        "lexington": "Primarily single-family zoning near transit"
+      }
+    }
+  }
+}
