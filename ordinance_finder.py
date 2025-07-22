@@ -2,7 +2,7 @@ import os
 import json
 import re
 from typing import Dict, Optional
-from flask import Flask, request, jsonify, render_template_string
+from flask import Flask, request, jsonify, render_template
 from anthropic import Anthropic
 from dotenv import load_dotenv
 
@@ -13,78 +13,6 @@ app = Flask(__name__)
 
 # Initialize Anthropic client
 client = Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
-
-# HTML template for the web interface
-HTML_TEMPLATE = """
-<!DOCTYPE html>
-<html>
-<head>
-    <title>City Zoning Ordinance Finder</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .container { background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0; }
-        input[type="text"] { width: 300px; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
-        button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background: #005a87; }
-        .result { margin-top: 20px; padding: 15px; background: white; border-radius: 5px; border-left: 4px solid #007cba; }
-        .error { border-left-color: #dc3545; background: #f8d7da; }
-        .loading { color: #666; font-style: italic; }
-        a { color: #007cba; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-    <h1>City Zoning Ordinance Finder</h1>
-    <div class="container">
-        <form id="zoningForm">
-            <label for="city">Enter City Name:</label><br>
-            <input type="text" id="city" name="city" placeholder="e.g., San Francisco, CA" required>
-            <button type="submit">Find Zoning Ordinance</button>
-        </form>
-    </div>
-    
-    <div id="result"></div>
-
-    <script>
-        document.getElementById('zoningForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const city = document.getElementById('city').value;
-            const resultDiv = document.getElementById('result');
-            
-            resultDiv.innerHTML = '<div class="result loading">Searching for zoning ordinance...</div>';
-            
-            try {
-                const response = await fetch('/api/zoning', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({city: city})
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    resultDiv.innerHTML = `
-                        <div class="result">
-                            <h3>Zoning Ordinance Found for ${data.city}</h3>
-                            <p><strong>Document Link:</strong> <a href="${data.link}" target="_blank">${data.link}</a></p>
-                            <p><strong>File Type:</strong> ${data.file_type}</p>
-                            ${data.notes ? `<p><strong>Notes:</strong> ${data.notes}</p>` : ''}
-                        </div>
-                    `;
-                } else {
-                    resultDiv.innerHTML = `<div class="result error">Error: ${data.error}</div>`;
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
-            }
-        });
-    </script>
-</body>
-</html>
-"""
 
 def parse_zoning_response(response_text: str) -> Dict:
     """Parse the Claude response to extract zoning ordinance information."""
@@ -186,7 +114,7 @@ Use the web search tool to find current, accurate information. Do not rely on yo
 @app.route('/')
 def home():
     """Serve the web interface."""
-    return render_template_string(HTML_TEMPLATE)
+    return render_template('index.html')
 
 @app.route('/api/zoning', methods=['POST'])
 def api_zoning():
