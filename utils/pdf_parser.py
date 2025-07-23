@@ -44,6 +44,16 @@ def extract_text(path: str) -> List[str]:
         raise PDFAnalysisError("PDF contains no extractable text (likely scanned).")
     return pages
 
+# ---------------------------------------------------------------- chunk texts into easier pieces for LLM
+
+def chunk_text(pages: List[str], chunk_size: int = 5000) -> List[str]:
+    """Combine pages and split into ~5000-char chunks for LLM context."""
+    full_text = "\n\n".join(pages)
+    if not full_text:
+        return []
+    # Simple chunking by character count
+    return [full_text[i:i + chunk_size] for i in range(0, len(full_text), chunk_size)]
+
 # ---------------------------------------------------------------- summarize / score – wrap LLM errors
 def summarize_chunks(chunks: List[str], client) -> str:
     partial = []

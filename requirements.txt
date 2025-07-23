@@ -3,3 +3,4 @@ anthropic==0.58.2
 python-dotenv==1.0.0
 requests==2.31.0
 pdfplumber==0.11.7
+pytest==8.4.1

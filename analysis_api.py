@@ -1,6 +1,6 @@
 # analysis_api.py  -----------------------------------------------------------------
 """
-Synchronous analysis micro-service (no Celery).
+Synchronous analysis micro-service.
 ─────────────────────────────────────────────
 Responsibilities
 1. Accept a PDF link (found by ordinance_finder) & run analysis immediately.
