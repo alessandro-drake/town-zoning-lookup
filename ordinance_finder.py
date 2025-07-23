@@ -43,53 +43,31 @@ def parse_zoning_response(response_text: str) -> Dict:
 def get_zoning_ordinance(city_name: str) -> Dict:
     """Get zoning ordinance information for a city using Claude with web search tools."""
     
-    prompt = f"""
-You are tasked with finding the most recent version of a city's zoning ordinance, code, or bylaw for development. Your goal is to return a concise result with a working web link to the document, preferably in PDF format.
+    prompt = f"""You are an expert assistant specializing in finding municipal documents. Your sole mission is to find a direct link to the most recent, official PDF of a city's zoning ordinance or bylaw.
 
-The city name you will be searching for is:
-<city_name>
-{city_name}
-</city_name>
+The city is: **{city_name}**
 
-Follow these steps to complete the task:
+**Your Process:**
+1.  **Prioritize PDF-focused searches.** Use precise search terms like `"{city_name} zoning bylaw filetype:pdf"` and `"{city_name} town code chapter zoning"`.
+2.  **Analyze Search Results.** Look for links from official government domains (e.g., `.gov`, `.gov.uk`, `.ca.gov`). These are the most trustworthy sources.
+3.  **Handle Web Pages.** If your search leads to a webpage instead of a direct PDF, you must **analyze the page's content** for phrases like "Zoning Bylaw," "Download the Code," or "Chapter 174" to find the actual download link for the PDF document. Do not just return the link to the webpage.
+4.  **Verify Recency.** Check for a date on the document to ensure it's the most recent version. Note this date.
 
-1. Search the web for the zoning ordinance of the specified city. Use search terms like:
-   - "{city_name} zoning ordinance filetype:pdf"
-   - "{city_name} zoning code official"
-   - "{city_name} municipal code zoning"
-
-2. Look for official government websites (.gov domains preferred)
-
-3. Verify that you have found the most recent version of the ordinance by:
-   - Checking the date of publication or last update
-   - Looking for mentions of recent amendments or revisions
-   - Ensuring it's the comprehensive city-wide ordinance, not just a district-specific document
-
-4. Prioritize:
-   - Direct PDF links over web pages
-   - Official city/government websites over third-party sites
-   - Recent documents over archived versions
-
-5. If you find multiple versions, explain your reasoning for selecting the most recent/official one
-
-Return your findings in the following format:
+**Output Format:**
+Return your findings *only* in the following XML format.
 
 <zoning_ordinance>
 <city>{city_name}</city>
-<link>Insert the direct link to the ordinance document here</link>
-<file_type>Specify whether it's a PDF, web page, or other format</file_type>
-<notes>Include brief notes about the document, its date, or your search process if relevant</notes>
+<link>INSERT THE DIRECT .PDF LINK HERE</link>
+<file_type>PDF</file_type>
+<notes>Note the document's date and why you believe it is the correct one. If you absolutely cannot find a direct PDF link after analyzing webpages, explain why here.</notes>
 </zoning_ordinance>
-
-If you cannot find a reliable zoning ordinance, explain the issue in the <notes> section and suggest alternatives like contacting the city directly.
-
-Use the web search tool to find current, accurate information. Do not rely on your training data for specific document links.
 """
     
     try:
         # Using the correct web search tool syntax from Anthropic documentation
         response = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
+            model="claude-sonnet-4-20250514",
             max_tokens=2000,
             tools=[
                 {

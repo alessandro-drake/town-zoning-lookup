@@ -1,4 +1,6 @@
 # tests/test_analyzer.py
+# tests logic in pdf_parser.py. Goes through every function, 
+# sees if it gets what it wants that it outputs the correct thing
 
 import os
 import json

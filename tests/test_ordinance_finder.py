@@ -1,4 +1,6 @@
 # tests/test_ordinance_finder.py
+# tests logic in ordinance_finder.py. Goes through every function, 
+# sees if it gets what it wants that it outputs the correct thing
 
 import pytest
 import json
