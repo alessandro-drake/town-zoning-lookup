@@ -1,67 +1,47 @@
-<!-- templates/index.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>City Zoning Ordinance Finder</title>
+{% extends "base.html" %}
 
-    <!-- If you add a real stylesheet later place it in /static/css -->
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"> -->
+{% block title %}Town Zoning Lookup - Find Municipal Zoning Ordinances{% endblock %}
 
+{% block content %}
+    <header class="header" id="siteHeader">
+        <h1>Town Zoning Lookup</h1>
+        <p class="header-subtitle">Find and verify official zoning ordinances for cities across the United States. Get direct access to municipal planning documents to understand local development regulations.</p>
+    </header>
+
+    <main style="flex: 1;">
+        <div class="search-card">
+            <form id="zoningForm">
+                <div class="form-group">
+                    <label for="city" class="form-label">City Name</label>
+                    <input 
+                        type="text" 
+                        id="city" 
+                        name="city" 
+                        class="form-input" 
+                        placeholder="e.g., San Francisco, CA or Boston, Massachusetts" 
+                        required
+                        autocomplete="address-level2"
+                    >
+                </div>
+                
+                <button type="submit" id="submitBtn" class="btn" disabled>
+                    🔍 Find Zoning Ordinance
+                </button>
+            </form>
+        </div>
+
+        <div id="result" aria-live="polite"></div>
+    </main>
+
+    <footer class="site-footer">
+        <p class="attribution">
+            <a href="https://www.flickr.com/photos/walkingsf/4622373980" title="The Geotaggers' World Atlas #7: Boston">The Geotaggers' World Atlas #7: Boston</a> by <a href="https://www.flickr.com/photos/walkingsf/">Erica Fischer</a>, <a href="https://creativecommons.org/licenses/by-sa/2.0/deed.en" rel="license noopener noreferrer">CC BY-SA 2.0</a>
+        </p>
+    </footer>
+{% endblock %}
+
+{% block extra_head %}
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .container { background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0; }
-        input[type="text"] { width: 300px; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
-        button { background: #007cba; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background: #005a87; }
-        .result { margin-top: 20px; padding: 15px; background: #fff; border-radius: 5px; border-left: 4px solid #007cba; }
-        .error  { border-left-color: #dc3545; background: #f8d7da; }
-        .loading{ color:#666; font-style:italic; }
-        a { color:#007cba; text-decoration:none; }  a:hover{ text-decoration:underline; }
+        /* Additional page-specific styles can go here */
     </style>
-</head>
-<body>
-    <h1>City Zoning Ordinance Finder</h1>
-
-    <div class="container">
-        <form id="zoningForm" action="{{ url_for('api_zoning') }}" method="post">
-            <label for="city">Enter City Name:</label><br>
-            <input type="text" id="city" name="city" placeholder="e.g.\ San Francisco, CA" required>
-            <button type="submit">Find Zoning Ordinance</button>
-        </form>
-    </div>
-
-    <div id="result"></div>
-
-    <!-- If you add external JS place it in /static/js -->
-    <!-- <script src="{{ url_for('static', filename='js/main.js') }}"></script> -->
-
-    <script>
-        document.getElementById('zoningForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const city = document.getElementById('city').value.trim();
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '<div class="result loading">Searching for zoning ordinance…</div>';
-
-            const resp   = await fetch("{{ url_for('api_zoning') }}", {
-                method: 'POST',
-                headers:{ 'Content-Type':'application/json' },
-                body: JSON.stringify({ city })
-            });
-            const data   = await resp.json();
-
-            if (resp.ok){
-                resultDiv.innerHTML = `
-                    <div class="result">
-                        <h3>Zoning Ordinance Found for ${data.city}</h3>
-                        <p><b>Document:</b> <a href="${data.link}" target="_blank">${data.link}</a></p>
-                        <p><b>Type:</b> ${data.file_type}</p>
-                        ${data.notes ? `<p><b>Notes:</b> ${data.notes}</p>` : ''}
-                    </div>`;
-            } else {
-                resultDiv.innerHTML = `<div class="result error">Error: ${data.error}</div>`;
-            }
-        });
-    </script>
-</body>
-</html>
+{% endblock %}
